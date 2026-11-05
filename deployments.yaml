@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: web
   labels:
-    app: nginx
+    app: web
 spec:
   replicas: 3
   selector:
@@ -23,7 +23,7 @@ spec:
         limits:
           memory: 128Mi
           cpu: 100m
-          requests:
+        requests:
           cpu: 100m
           memory: 64Mi  
-
+      
