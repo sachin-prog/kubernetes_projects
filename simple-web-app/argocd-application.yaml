@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: simple-web-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/sachin-prog/kubernetes_projects.git
+    targetRevision: main
+    path: simple-web-app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: false
+    syncOptions:
+      - CreateNamespace=true
