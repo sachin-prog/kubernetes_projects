@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: simple-web-app
-        image: sachin2991/simple-web-app:v1
+        image: sachin2991/simple-web-app:11b3a3d
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
