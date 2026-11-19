@@ -38,7 +38,8 @@ pipeline {
                     def appFiles = [
                         'simple-web-app/app.py',
                         'simple-web-app/Dockerfile',
-                        'simple-web-app/requirements.txt'
+                        'simple-web-app/requirements.txt',
+                        'simple-web-app/tests/test_app.py'
                     ]
 
                     def appChanged = false
@@ -76,7 +77,25 @@ pipeline {
                 '''
             }
         }
+        stage('Automated Tests') {
+    when {
+        expression { env.BUILD_APP == 'true' }
+    }
+    steps {
+        sh '''
+            if [ ! -x "$WORKSPACE/.venv-ci/bin/python" ]; then
+                python3 -m venv "$WORKSPACE/.venv-ci"
+            fi
 
+            "$WORKSPACE/.venv-ci/bin/pip" install \
+                -r simple-web-app/requirements.txt pytest
+
+            cd simple-web-app
+
+            ../.venv-ci/bin/python -m pytest tests/ -v
+        '''
+    }
+}
         stage('Build Docker Image') {
             when {
                 expression { env.BUILD_APP == 'true' }
