@@ -79,8 +79,11 @@ pipeline {
         }
         stage('Automated Tests') {
     when {
+        allof {
+            branch 'main'
         expression { env.BUILD_APP == 'true' }
     }
+}
     steps {
         sh '''
             if [ ! -x "$WORKSPACE/.venv-ci/bin/python" ]; then
