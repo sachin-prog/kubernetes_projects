@@ -85,7 +85,7 @@ pipeline {
         }
         stage('Automated Tests') {
     when {
-        allof {
+        allOf {
             branch 'main'
         expression { env.BUILD_APP == 'true' }
     }
