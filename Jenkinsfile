@@ -55,6 +55,12 @@ pipeline {
                     }
 
                     // Build on the first run, even without a changelog.
+                    // Always run validation and tests for Pull Requests
+                    if (env.CHANGE_ID) {
+                        appChanged = true
+                        echo "Pull Request detected. Enabling application validation and tests."
+                    }       
+
                     if (currentBuild.previousBuild == null) {
                         appChanged = true
                     }
