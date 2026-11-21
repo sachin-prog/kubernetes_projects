@@ -59,7 +59,7 @@ pipeline {
                     if (env.CHANGE_ID) {
                         appChanged = true
                         echo "Pull Request detected. Enabling application validation and tests."
-                    }       
+                    }
 
                     if (currentBuild.previousBuild == null) {
                         appChanged = true
@@ -85,11 +85,9 @@ pipeline {
         }
         stage('Automated Tests') {
     when {
-        allOf {
-            branch 'main'
         expression { env.BUILD_APP == 'true' }
     }
-}
+
     steps {
         sh '''
             if [ ! -x "$WORKSPACE/.venv-ci/bin/python" ]; then
@@ -107,7 +105,10 @@ pipeline {
 }
         stage('Build Docker Image') {
             when {
-                expression { env.BUILD_APP == 'true' }
+                allOf {
+                    branch 'main'
+                    expression { env.BUILD_APP == 'true' }
+                }
             }
             steps {
                 sh '''
@@ -121,7 +122,10 @@ pipeline {
 
         stage('Push to Docker Hub') {
             when {
-                expression { env.BUILD_APP == 'true' }
+                allOf {
+                    branch 'main'
+                    expression { env.BUILD_APP == 'true' }
+                }
             }
             steps {
                 withCredentials([
@@ -146,7 +150,10 @@ pipeline {
 
         stage('Update Kubernetes Manifest') {
             when {
-                expression { env.BUILD_APP == 'true' }
+                allOf {
+                    branch 'main'
+                    expression { env.BUILD_APP == 'true' }
+                }
             }
             steps {
                 sh '''
@@ -166,7 +173,10 @@ pipeline {
 
         stage('Push Manifest to GitHub') {
             when {
-                expression { env.BUILD_APP == 'true' }
+                allOf {
+                    branch 'main'
+                    expression { env.BUILD_APP == 'true' }
+                }
             }
             steps {
                 withCredentials([
